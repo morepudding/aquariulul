@@ -1,0 +1,23 @@
+node:internal/fs/watchers:321
+    const error = new UVException({
+                  ^
+
+Error: EBUSY: resource busy or locked, watch 'C:\RomainOpen\aquariul\.antigravitycli\85ee6b05-4b5e-4dee-84e7-8b83cebaff8e.json'
+    at FSWatcher.<computed> (node:internal/fs/watchers:321:19)
+    at Object.watch (node:fs:2532:36)
+    at createFsWatchInstance (file:///C:/RomainOpen/aquariul/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:22195:17)
+    at setFsWatchListener (file:///C:/RomainOpen/aquariul/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:22242:15)
+    at NodeFsHandler._watchWithNodeFs (file:///C:/RomainOpen/aquariul/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:22397:14)
+    at NodeFsHandler._handleFile (file:///C:/RomainOpen/aquariul/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:22461:23)
+    at NodeFsHandler._addToNodeFs (file:///C:/RomainOpen/aquariul/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:22703:21)
+Emitted 'error' event on FSWatcher instance at:
+    at FSWatcher._handleError (file:///C:/RomainOpen/aquariul/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:23896:10)
+    at NodeFsHandler._addToNodeFs (file:///C:/RomainOpen/aquariul/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:22711:18) {
+  errno: -4082,
+  syscall: 'watch',
+  code: 'EBUSY',
+  path: 'C:\\RomainOpen\\aquariul\\.antigravitycli\\85ee6b05-4b5e-4dee-84e7-8b83cebaff8e.json',
+  filename: 'C:\\RomainOpen\\aquariul\\.antigravitycli\\85ee6b05-4b5e-4dee-84e7-8b83cebaff8e.json'
+}
+
+Node.js v26.2.0

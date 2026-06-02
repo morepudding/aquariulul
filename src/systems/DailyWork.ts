@@ -30,8 +30,13 @@ export class DailyWork {
     this.lastWoodcutterWorkDay = savedState.lastWoodcutterWorkDay;
   }
 
-  canStartWoodcutterWork(currentDay: number, forestCurrent: number): boolean {
+  canStartWoodcutterWork(
+    currentDay: number,
+    forestCurrent: number,
+    dailyActionsRemaining = 1,
+  ): boolean {
     return (
+      dailyActionsRemaining > 0 &&
       forestCurrent >= WOODCUTTER_WORK.requiredForestCurrent &&
       this.lastWoodcutterWorkDay !== currentDay
     );

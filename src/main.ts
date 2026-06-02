@@ -5,9 +5,13 @@ import './style.css';
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'game',
-  width: 900,
-  height: 690,
-  backgroundColor: '#20252a',
+  width: 1280,
+  height: 720,
+  backgroundColor: '#1f2726',
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
   scene: [GameScene],
 };
 

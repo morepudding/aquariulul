@@ -13,10 +13,12 @@ type SavedState = {
   forestCurrent: number;
   forestMax: number;
   triggeredForestThresholds: ForestThreshold[];
+  dailyActionsRemaining: number;
 };
 
 const STORAGE_KEY = 'petit-monde-vivant:state';
 const DEFAULT_FOREST_MAX = 100;
+export const DAILY_ACTIONS_PER_DAY = 2;
 
 const DEFAULT_STATE: SavedState = {
   resources: {
@@ -27,6 +29,7 @@ const DEFAULT_STATE: SavedState = {
   forestCurrent: DEFAULT_FOREST_MAX,
   forestMax: DEFAULT_FOREST_MAX,
   triggeredForestThresholds: [],
+  dailyActionsRemaining: DAILY_ACTIONS_PER_DAY,
 };
 
 export class GameState {
@@ -35,6 +38,7 @@ export class GameState {
   forestCurrent: number;
   forestMax: number;
   triggeredForestThresholds: ForestThreshold[];
+  dailyActionsRemaining: number;
 
   constructor() {
     const savedState = this.load();
@@ -44,6 +48,7 @@ export class GameState {
     this.forestCurrent = savedState.forestCurrent;
     this.forestMax = savedState.forestMax;
     this.triggeredForestThresholds = savedState.triggeredForestThresholds;
+    this.dailyActionsRemaining = savedState.dailyActionsRemaining;
   }
 
   setActivity(activity: Activity): void {
@@ -55,7 +60,10 @@ export class GameState {
     this.save();
   }
 
-  produce(): ForestThreshold[] {
+  produce(
+    forestStockPreservationChance = 0,
+    mineExtraStoneChance = 0,
+  ): ForestThreshold[] {
     const newForestThresholds: ForestThreshold[] = [];
 
     if (this.activity === 'forest') {
@@ -66,8 +74,10 @@ export class GameState {
       }
 
       this.resources.wood += 1;
-      this.forestCurrent = Math.max(0, this.forestCurrent - 1);
-      newForestThresholds.push(...this.collectForestThresholds());
+      if (Math.random() >= forestStockPreservationChance) {
+        this.forestCurrent = Math.max(0, this.forestCurrent - 1);
+        newForestThresholds.push(...this.collectForestThresholds());
+      }
 
       if (!this.canUseForest()) {
         this.activity = 'village';
@@ -75,7 +85,7 @@ export class GameState {
     }
 
     if (this.activity === 'mine') {
-      this.resources.stone += 1;
+      this.resources.stone += Math.random() < mineExtraStoneChance ? 2 : 1;
     }
 
     this.save();
@@ -121,6 +131,45 @@ export class GameState {
     return true;
   }
 
+  spendResources(resources: Partial<Resources>): boolean {
+    const wood = Math.max(0, Math.floor(resources.wood || 0));
+    const stone = Math.max(0, Math.floor(resources.stone || 0));
+
+    if (this.resources.wood < wood || this.resources.stone < stone) {
+      return false;
+    }
+
+    this.resources.wood -= wood;
+    this.resources.stone -= stone;
+    this.save();
+    return true;
+  }
+
+  addResources(resources: Partial<Resources>): void {
+    this.resources.wood += Math.max(0, Math.floor(resources.wood || 0));
+    this.resources.stone += Math.max(0, Math.floor(resources.stone || 0));
+    this.save();
+  }
+
+  canUseDailyAction(): boolean {
+    return this.dailyActionsRemaining > 0;
+  }
+
+  spendDailyAction(): boolean {
+    if (!this.canUseDailyAction()) {
+      return false;
+    }
+
+    this.dailyActionsRemaining = Math.max(0, this.dailyActionsRemaining - 1);
+    this.save();
+    return true;
+  }
+
+  resetDailyActions(): void {
+    this.dailyActionsRemaining = DAILY_ACTIONS_PER_DAY;
+    this.save();
+  }
+
   canUseForest(): boolean {
     return this.forestCurrent > 0;
   }
@@ -131,6 +180,7 @@ export class GameState {
     this.forestCurrent = DEFAULT_STATE.forestCurrent;
     this.forestMax = DEFAULT_STATE.forestMax;
     this.triggeredForestThresholds = [];
+    this.dailyActionsRemaining = DEFAULT_STATE.dailyActionsRemaining;
     this.save();
   }
 
@@ -143,6 +193,7 @@ export class GameState {
         forestCurrent: this.forestCurrent,
         forestMax: this.forestMax,
         triggeredForestThresholds: this.triggeredForestThresholds,
+        dailyActionsRemaining: this.dailyActionsRemaining,
       }),
     );
   }
@@ -176,6 +227,9 @@ export class GameState {
         forestMax,
         triggeredForestThresholds: this.sanitizeForestThresholds(
           parsedState.triggeredForestThresholds,
+        ),
+        dailyActionsRemaining: this.sanitizeDailyActions(
+          parsedState.dailyActionsRemaining,
         ),
       };
     } catch {
@@ -239,6 +293,17 @@ export class GameState {
         threshold === 'empty'
       );
     });
+  }
+
+  private sanitizeDailyActions(actions: unknown): number {
+    if (actions === undefined) {
+      return DEFAULT_STATE.dailyActionsRemaining;
+    }
+
+    return Math.min(
+      Math.max(Math.floor(Number(actions) || 0), 0),
+      DAILY_ACTIONS_PER_DAY,
+    );
   }
 
   private isActivity(activity: unknown): activity is Activity {

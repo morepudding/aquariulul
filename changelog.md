@@ -2,6 +2,81 @@
 
 ## 2026-06-02
 
+- Added coded dirt paths connecting the Village to the Mine, the Old Bridge (continuing to the west bounds), and a dynamic Forest Road path that gets wider and clearer as the forest road regional project is funded and completed.
+- Added transition and grounding graphics around landmarks: a cluster of rocky background mounds and boulders for the Mine entrance, vector bush foliage for the Forest borders, and stone bank abutments for the Old Bridge.
+- Corrected the visual integration of the exhausted forest landmark to prevent floating, by hiding the green forest ground patch when the forest is empty and keeping the exhausted forest image solid instead of semi-transparent.
+- Redesigned building contact shadows under the Mine and Village landmarks to be extremely soft, thin, and realistic (concentric low-opacity gradient ellipses) rather than thick solid dark platforms.
+- Added saved daily actions with `dailyActionsRemaining`, starting at 2 actions and resetting to 2 on each new day.
+- Added daily resource actions for gathering up to 6 wood from the remaining forest stock and extracting 8 stone.
+- Integrated `Travail de bûcheron` into the daily action loop so it consumes 1 action at launch while keeping its existing 5-attempt timing rules and once-per-day gate.
+- Made village request completion consume 1 daily action in addition to the requested resources, with HUD buttons disabled when no daily actions remain.
+- Updated the compact HUD with an `Actions : x/2` counter and daily action buttons for wood, woodcutter work, and stone.
+- Reworked the landmark anchoring pass by removing broad visible ground disks and keeping only discreet contact shadows under Mine and Village.
+- Added seasonal visual overlays to color the meadow (fresh green for spring, golden for summer, warm orange for autumn, frosty white-blue for winter).
+- Replaced generic drifting elements with specific seasonal particles: cherry blossoms/leaves in spring, golden pollen/fireflies in summer, autumn leaves/mist in autumn, and falling snow across the screen in winter.
+- Added soft coded grounding patches and shadows under the Mine, Village, and old bridge landmarks to better anchor them into the meadow.
+- Replaced the visible square grass grid with organic meadow patches and subtle deterministic grass details.
+- Added a lightweight four-season cycle with 10-day seasons, 40-day years, and a compact HUD season chip.
+- Added seasonal forest regeneration timing: faster in spring, normal in summer/autumn, slower in winter.
+- Added seasonal event modifiers so village requests are more likely in summer/winter and the completed old bridge merchant route is stronger in autumn.
+- Added season-change chronicles for spring, summer, autumn, and winter without adding new resources, locations, or complex weather.
+- Added an invisible saved village memory counter, `villageHelpedCount`, that increments whenever a village request is completed.
+- Added one-shot saved village recognition thresholds at 3, 6, and 10 completed village requests, each adding a special chronicle without introducing reputation UI or new resources.
+- Extended the old bridge stream into a full-map coded river that enters and exits the world bounds while passing under the bridge.
+- Added a small coded stream under the old bridge landmark so the bridge visually spans a real map feature.
+- Added ambient visual day/night color filters using a camera-relative translucent overlay based on day progression.
+- Added ambient drifting elements to the world map: falling leaves near the forest during the day, and floating fireflies at night.
+- Added floating "+1 Bois" / "+1 Pierre" indicators rising from Foret and Mine landmarks upon resource production.
+- Reset the day time progress when the game save is reset.
+- Added an AI asset continuity rule requiring state variants to preserve source orientation, footprint, path direction, scale, and anchor point, preferably by using the integrated source asset as a reference image.
+- Generated and integrated `public/assets/village-landmark.png` as the Village world-map landmark.
+- Generated and integrated `public/assets/old-bridge-damaged.png` and `public/assets/old-bridge-repaired.png`, with `GameScene` switching to the repaired bridge when the old bridge project is completed.
+- Generated and integrated `public/assets/forest-exhausted.png` as the Foret landmark shown when the forest is unavailable.
+- Updated `project.config.md` and `asset/create-ai-asset.md` with the new village, bridge, and exhausted forest assets.
+- Added the saved `VillageRequests` system with one active local village request at a time, 40% new-day appearance chance, 2-day duration, expiration chronicles, completion chronicles, and the first three wood/stone requests.
+- Added a compact HUD village request strip with request name, cost, days remaining, and an `Aider` button that is disabled until the player has enough resources.
+- Wired village request completion to consume resources, save/reset request state, and restore active requests after reload without changing regional projects or Foret/Mine production.
+- Updated `project.config.md` with the new village request loop, persistence, and architecture entry.
+- Condensed the HUD into a smaller visual hierarchy: compact top status/action strips, one latest chronicle line, and a reduced regional projects strip with compact rows.
+- Added the `Étayer l’entrée de la mine` regional project, unlocked after the old bridge is completed, with saved status, a 4-day completion timer, start and completion chronicles, compact HUD display, and a completed effect that gives active Mine production a 25% chance to grant +1 extra stone.
+- Added the `Tracer une route forestière` regional project, unlocked after the old bridge is completed, with saved funding state, a 4-day completion timer, start and completion chronicles, and a completed effect that gives active Foret wood production only a 50% chance to consume `forestCurrent`.
+- Generated and integrated `public/assets/mine-entrance.png` as the Mine world-map landmark.
+- Reduced the forest landmark and ground patch display sizes to make the map read more zoomed out and less sticker-like.
+- Updated `project.config.md` and `asset/create-ai-asset.md` with the mine integration and landmark scale lesson.
+- Generated and integrated `public/assets/forest-ground-patch.png` as a painted meadow blend under the healthy forest landmark.
+- Updated `GameScene` to preload and render the forest ground patch beneath the Foret asset.
+- Updated `project.config.md` and `asset/create-ai-asset.md` with the forest ground patch integration and visual lesson.
+- Integrated the generated healthy forest image as `public/assets/forest-healthy.png` and replaced the Foret world marker with the asset in `GameScene`.
+- Updated `project.config.md` and `asset/create-ai-asset.md` to track the integrated healthy forest landmark.
+- Added a temporary world-space notification near the village when the old bridge merchant route grants resources.
+- Generated a first healthy forest landmark preview on a chroma-key background and logged it in `asset/create-ai-asset.md` for review before integration.
+- Added a compact HUD speed regulator for x1 through x5 world timer speed.
+- Cleared the scrollable map scenery into an empty top-down green meadow with subtle grass variation.
+- Replaced large placeholder landmark drawings with small discreet interactive place markers.
+- Updated `project.config.md` to describe the current empty meadow map baseline for future assets.
+- Made the world map larger than the viewport and scrollable by dragging or using the mouse wheel, with the HUD fixed as a translucent overlay above it.
+- Updated the woodcutter timing overlay so it stays screen-fixed above the scrollable map.
+- Updated `project.config.md` with the current scrollable-map behavior.
+- Rebuilt the HUD as discreet translucent overlays integrated above the canvas, removing the opaque right-side and bottom panels.
+- Updated `project.config.md` with the current transparent HUD overlay direction.
+- Updated the AI asset direction to prioritize a scrollable world map first, with HUD elements treated as overlays above the map.
+- Updated `project.config.md` with the future map-first and HUD-overlay visual direction.
+- Added `create-ai-asset.md` as the review workflow for future AI-generated visual assets.
+- Updated `project.config.md` to allow explicitly requested AI assets when tracked through the asset review document.
+- Replaced the first visual refactor with a clearer 16:9 game composition: large world map, right-side situation panel, bottom chronicle journal, and separate bridge project panel.
+- Rebuilt the map presentation so Foret, Mine, and Village are large clickable landmarks inside the world instead of small bottom cards.
+- Reworked the HUD again for clarity with readable short labels, resource rows, day/activity state, forest and time gauges, and clearly labeled action buttons.
+- Resized and repositioned the woodcutter timing overlay for the new 1280x720 screen.
+- Updated `project.config.md` with the new 16:9 visual layout direction.
+- Reworked the visual direction with a calmer medieval interface, drawn location silhouettes, warm panels, and a simple landscape backdrop.
+- Replaced the verbose HUD with compact visual counters, activity marks, resource icons, forest/day gauges, project progress pips, and icon-only action buttons.
+- Updated the woodcutter timing work overlay to use visual attempt and success pips with shorter interface text.
+- Made the Phaser canvas scale responsively inside the browser viewport instead of sitting as a fixed-size page block.
+- Updated `project.config.md` with the minimal-text HUD, no-emoji interface rule, and responsive canvas constraint.
+- Added `AGENTS.md` encoding rules to prefer UTF-8 reads and ASCII-only patch anchors around accented French text on Windows.
+- Added the completed old bridge passive merchant route effect: each new day has a 30% chance to grant a small wood/stone reward and add a dedicated merchant chronicle.
+- Added a saved `GameState.addResources` helper for project rewards that should not consume forest stock.
+- Updated `project.config.md` to reflect the old bridge's ongoing gameplay reward after completion.
 - Kept the current activity running when `Travail de bûcheron` starts, so the daily work no longer switches the game to Village.
 - Added the saved daily `Travail de bûcheron` job, gated by `forestCurrent >= 10` and one launch per current day.
 - Added a simple Phaser timing mini-game with 5 attempts, a moving cursor, a central success zone, click input, and Space input.

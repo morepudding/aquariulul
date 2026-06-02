@@ -12,6 +12,13 @@ This file contains the working rules for AI agents editing this repository. It m
 - Prefer simple, readable, extensible code over premature systems.
 - Run `npm run build` after TypeScript or gameplay code changes.
 
+## Encoding rules
+
+- Treat repository text files as UTF-8.
+- On Windows, when reading files with accented text, prefer explicit UTF-8 reads if terminal output looks garbled.
+- When using `apply_patch`, prefer ASCII-only context anchors around accented French text so patch matching does not depend on terminal-rendered accents.
+- Do not rewrite accented project text just to avoid encoding issues; preserve the existing content unless the task asks for text changes.
+
 ## Code rules
 
 - Stack: Phaser 4, TypeScript, Vite.
